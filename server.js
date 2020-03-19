@@ -2,17 +2,22 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const expect = require("chai").expect;
 const cors = require("cors");
+const helmet = require("helmet");
 
+const { NODE_ENV, PORT } = require("./config");
 const apiRoutes = require("./routes/api.js");
 const fccTestingRoutes = require("./routes/fcctesting.js");
 const runner = require("./test-runner");
 
-const { NODE_ENV, PORT } = require("./config");
-
 const app = express();
 
+app.use(helmet({
+  noSniff: true,
+  xssFilter: true, 
+  hidePoweredBy: true,
+  hsts:true
+}))
 app.use("/public", express.static(process.cwd() + "/public"));
 
 app.use(cors({ origin: "*" })); //For FCC testing purposes only
@@ -44,15 +49,14 @@ app.listen(PORT || 3000, function() {
   console.log("Listening on port " + PORT);
   if (NODE_ENV === "test") {
     console.log("Running Tests...");
-    setTimeout(function() {
-      try {
-        runner.run();
-      } catch (e) {
-        var error = e;
-        console.log("Tests are not valid:");
-        console.log(error);
-      }
-    }, 1500);
+
+    try {
+      runner.run();
+    } catch (e) {
+      var error = e;
+      console.log("Tests are not valid:");
+      console.log(error);
+    }
   }
 });
 

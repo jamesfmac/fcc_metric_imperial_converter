@@ -61,7 +61,6 @@ suite("Unit Tests", function() {
         "lbs",
         "kg",
         "GAL",
-        "L",
         "MI",
         "KM",
         "LBS",
@@ -75,7 +74,7 @@ suite("Unit Tests", function() {
 
     test("Unknown Unit Input", function(done) {
       const input = "rt";
-      assert.equal(convertHandler.getUnit(input), "invalid unit" );
+      assert.equal(convertHandler.getUnit(input), "invalid unit");
 
       done();
     });
@@ -98,13 +97,13 @@ suite("Unit Tests", function() {
       var expect = [
         "gallons",
         "liters",
-        "kilometers",
         "miles",
-        "kilograms",
-        "pounds"
+        "kilometers",
+        "pounds",
+        "kilograms"
       ];
       input.forEach((ele, i) => {
-        assert.equal(convertHandler.spellOutUnit(input), expect[i]);
+        assert.equal(convertHandler.spellOutUnit(ele), expect[i]);
       });
 
       done();
@@ -125,7 +124,7 @@ suite("Unit Tests", function() {
 
     test("L to Gal", function(done) {
       const input = [2, "l"];
-      const expected = 0.90718;
+      const expected = 0.528344;
       assert.approximately(
         convertHandler.convert(input[0], input[1]),
         expected,

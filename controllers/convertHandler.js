@@ -18,7 +18,6 @@ function ConvertHandler() {
     // Strip input of valid/invalid units
     const unitRegex = /([^\d]+$)/;
     const numOrEq = input.replace(unitRegex, "");
-    // console.log(input);
 
     const letterRegex = /[a-zA-Z]+/;
     // Input is something like '1a3lbs' or 'a4gal'
@@ -26,12 +25,12 @@ function ConvertHandler() {
 
     const result = math.evaluate(numOrEq);
 
-    return result.toFixed(5);
+    return +result.toFixed(5);
   };
 
   this.getUnit = function(input) {
     if (!input) return "invalid number and unit";
-    const allowedUnits = ["gal", "l", "mi", "km", "lbs", "kg", "L"];
+    const allowedUnits = ["gal", "l", "mi", "km", "lbs", "kg"];
     var result;
     let unitReg = /[a-zA-Z]+$/;
     result = input.match(unitReg);
@@ -44,15 +43,31 @@ function ConvertHandler() {
   };
 
   this.getReturnUnit = function(initUnit) {
+    const returnUnits = {
+      gal: "l",
+      l: "gal",
+      mi: "km",
+      km: "mi",
+      lbs: "kg",
+      kg: "lbs",
+      L: "blah"
+    };
     var result;
 
-    return result;
+    return returnUnits[initUnit];
   };
 
   this.spellOutUnit = function(unit) {
-    var result;
+    const returnSpelling = {
+      gal: "gallons",
+      l: "liters",
+      mi: "miles",
+      km: "kilometers",
+      lbs: "pounds",
+      kg: "kilograms"
+    };
 
-    return result;
+    return returnSpelling[unit];
   };
 
   this.convert = function(initNum, initUnit) {
@@ -61,13 +76,36 @@ function ConvertHandler() {
     const miToKm = 1.60934;
     var result;
 
-    return result;
+    //["gal", "l", "mi", "km", "lbs", "kg"];
+
+    switch (initUnit) {
+      case "gal":
+        result = initNum * galToL;
+        break;
+      case "l":
+        result = initNum / galToL;
+        break;
+      case "lbs":
+        result = initNum * lbsToKg;
+        break;
+      case "kg":
+        result = initNum / lbsToKg;
+        break;
+      case "mi":
+        result = initNum * miToKm;
+        break;
+      case "km":
+        result = initNum / miToKm;
+        break;
+    }
+
+    return +result.toFixed(5);
   };
 
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {
     var result;
 
-    return result;
+    return `${initNum} ${initUnit} converts to ${returnNum} ${returnUnit}`;
   };
 }
 
